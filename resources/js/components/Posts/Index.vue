@@ -3,6 +3,22 @@
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="overflow-hidden">
+                    <div class="mb-4">
+                        <select
+                            v-model="selectedCategory"
+                            class="block mt-1 w-full sm:w-1/4 rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        >
+                            <option value="" selected>
+                                -- Filter by category --
+                            </option>
+                            <option
+                                v-for="category in categories"
+                                :value="category.id"
+                            >
+                                {{ category.name }}
+                            </option>
+                        </select>
+                    </div>
                     <table class="min-w-full">
                         <thead class="bg-white border-b">
                             <tr>
@@ -79,15 +95,20 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import usePosts from "../../composable/post";
+import useCategories from "../../composable/categories";
 
 export default {
     setup() {
         const { posts, getPosts } = usePosts();
-        onMounted(getPosts);
+        const { categories, getCategories } = useCategories();
+        onMounted(() => {
+            getPosts();
+            getCategories();
+        });
 
-        return { posts, getPosts };
+        return { posts, getPosts, categories };
     },
 };
 </script>
