@@ -86,7 +86,9 @@
                     </table>
                     <LaravelVuePagination
                         :data="posts"
-                        @pagination-change-page="getPosts"
+                        @pagination-change-page="
+                            (page) => getPosts(page, selectedCategory)
+                        "
                     />
                 </div>
             </div>
@@ -95,12 +97,13 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import usePosts from "../../composable/post";
 import useCategories from "../../composable/categories";
 
 export default {
     setup() {
+        const selectedCategory = ref(false);
         const { posts, getPosts } = usePosts();
         const { categories, getCategories } = useCategories();
         onMounted(() => {
@@ -108,7 +111,11 @@ export default {
             getCategories();
         });
 
-        return { posts, getPosts, categories };
+        watch(selectedCategory, (current, previous) => {
+            getPosts(1, current);
+        });
+
+        return { posts, getPosts, categories, selectedCategory };
     },
 };
 </script>
