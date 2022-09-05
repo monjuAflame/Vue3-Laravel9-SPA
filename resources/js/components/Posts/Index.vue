@@ -26,12 +26,100 @@
                                     scope="col"
                                     class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                                 >
+                                    <div
+                                        class="flex flex-row items-center justify-between cursor-pointer"
+                                        @click="updateOrdering('id')"
+                                    >
+                                        <div
+                                            class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                            :class="{
+                                                'font-bold text-blue-600':
+                                                    orderColumn === 'id',
+                                            }"
+                                        >
+                                            ID
+                                        </div>
+                                        <div class="select-none">
+                                            <span
+                                                :class="{
+                                                    'text-blue-600':
+                                                        orderDirection ===
+                                                            'asc' &&
+                                                        orderColumn === 'id',
+                                                    hidden:
+                                                        orderDirection !== '' &&
+                                                        orderDirection !==
+                                                            'asc' &&
+                                                        orderColumn === 'id',
+                                                }"
+                                                >&uarr;</span
+                                            >
+                                            <span
+                                                :class="{
+                                                    'text-blue-600':
+                                                        orderDirection ===
+                                                            'desc' &&
+                                                        orderColumn === 'id',
+                                                    hidden:
+                                                        orderDirection !== '' &&
+                                                        orderDirection !==
+                                                            'desc' &&
+                                                        orderColumn === 'id',
+                                                }"
+                                                >&darr;</span
+                                            >
+                                        </div>
+                                    </div>
                                     #
                                 </th>
                                 <th
                                     scope="col"
                                     class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                                 >
+                                    <div
+                                        class="flex flex-row items-center justify-between cursor-pointer"
+                                        @click="updateOrdering('title')"
+                                    >
+                                        <div
+                                            class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                            :class="{
+                                                'font-bold text-blue-600':
+                                                    orderColumn === 'title',
+                                            }"
+                                        >
+                                            Title
+                                        </div>
+                                        <div class="select-none">
+                                            <span
+                                                :class="{
+                                                    'text-blue-600':
+                                                        orderDirection ===
+                                                            'asc' &&
+                                                        orderColumn === 'title',
+                                                    hidden:
+                                                        orderDirection !== '' &&
+                                                        orderDirection !==
+                                                            'asc' &&
+                                                        orderColumn === 'title',
+                                                }"
+                                                >&uarr;</span
+                                            >
+                                            <span
+                                                :class="{
+                                                    'text-blue-600':
+                                                        orderDirection ===
+                                                            'desc' &&
+                                                        orderColumn === 'title',
+                                                    hidden:
+                                                        orderDirection !== '' &&
+                                                        orderDirection !==
+                                                            'desc' &&
+                                                        orderColumn === 'title',
+                                                }"
+                                                >&darr;</span
+                                            >
+                                        </div>
+                                    </div>
                                     Title
                                 </th>
                                 <th
@@ -50,6 +138,55 @@
                                     scope="col"
                                     class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                                 >
+                                    <div
+                                        class="flex flex-row items-center justify-between cursor-pointer"
+                                        @click="updateOrdering('created_at')"
+                                    >
+                                        <div
+                                            class="leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                            :class="{
+                                                'font-bold text-blue-600':
+                                                    orderColumn ===
+                                                    'created_at',
+                                            }"
+                                        >
+                                            Created at
+                                        </div>
+                                        <div class="select-none">
+                                            <span
+                                                :class="{
+                                                    'text-blue-600':
+                                                        orderDirection ===
+                                                            'asc' &&
+                                                        orderColumn ===
+                                                            'created_at',
+                                                    hidden:
+                                                        orderDirection !== '' &&
+                                                        orderDirection !==
+                                                            'asc' &&
+                                                        orderColumn ===
+                                                            'created_at',
+                                                }"
+                                                >&uarr;</span
+                                            >
+                                            <span
+                                                :class="{
+                                                    'text-blue-600':
+                                                        orderDirection ===
+                                                            'desc' &&
+                                                        orderColumn ===
+                                                            'created_at',
+                                                    hidden:
+                                                        orderDirection !== '' &&
+                                                        orderDirection !==
+                                                            'desc' &&
+                                                        orderColumn ===
+                                                            'created_at',
+                                                }"
+                                                >&darr;</span
+                                            >
+                                        </div>
+                                    </div>
                                     Created At
                                 </th>
                             </tr>
@@ -103,7 +240,9 @@ import useCategories from "../../composable/categories";
 
 export default {
     setup() {
-        const selectedCategory = ref(false);
+        const selectedCategory = ref("");
+        const orderColumn = ref("created_at");
+        const orderDirection = ref("desc");
         const { posts, getPosts } = usePosts();
         const { categories, getCategories } = useCategories();
         onMounted(() => {
@@ -111,11 +250,31 @@ export default {
             getCategories();
         });
 
+        const updateOrdering = (column) => {
+            orderColumn.value = column;
+            orderDirection.value =
+                orderDirection.value === "asc" ? "desc" : "asc";
+            getPosts(
+                1,
+                selectedCategory.value,
+                orderColumn.value,
+                orderDirection.value
+            );
+        };
+
         watch(selectedCategory, (current, previous) => {
             getPosts(1, current);
         });
 
-        return { posts, getPosts, categories, selectedCategory };
+        return {
+            posts,
+            getPosts,
+            categories,
+            selectedCategory,
+            orderColumn,
+            orderDirection,
+            updateOrdering,
+        };
     },
 };
 </script>
