@@ -5,9 +5,9 @@ export default function usePosts() {
     const posts = ref([]);
 
     const getPosts = async () => {
-        axios
-            .get("/api/posts")
-            .then((response) => (posts.value = response.data));
+        axios.get("/api/posts").then((response) => {
+            posts.value = response.data.data;
+        });
     };
     return { posts, getPosts };
 }
