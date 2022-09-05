@@ -28,6 +28,12 @@
                                     scope="col"
                                     class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                                 >
+                                    Category
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                >
                                     Created At
                                 </th>
                             </tr>
@@ -52,11 +58,20 @@
                                 <td
                                     class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900"
                                 >
+                                    {{ post.category }}
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900"
+                                >
                                     {{ post.created_at }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <LaravelVuePagination
+                        :data="posts"
+                        @pagination-change-page="getPosts"
+                    />
                 </div>
             </div>
         </div>
@@ -72,7 +87,7 @@ export default {
         const { posts, getPosts } = usePosts();
         onMounted(getPosts);
 
-        return { posts };
+        return { posts, getPosts };
     },
 };
 </script>
