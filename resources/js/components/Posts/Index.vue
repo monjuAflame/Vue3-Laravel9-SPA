@@ -221,7 +221,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <LaravelVuePagination
+                    <Pagination
                         :data="posts"
                         @pagination-change-page="
                             (page) => getPosts(page, selectedCategory)
