@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Route;
 // Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::apiResource('posts', \App\Http\Controllers\Api\PostController::class);
-    Route::get('categories', [\App\Http\Controllers\Api\CategoryController::class, 'index']);
+    Route::apiResource('posts', \App\Http\Controllers\PostController::class);
+    Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'index']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
