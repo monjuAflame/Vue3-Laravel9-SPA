@@ -33,9 +33,15 @@ export default function usePosts() {
 
         isLoading.value = true;
         validationErrors.value = {};
+        let serializedPost = new FormData();
+        for (let item in post) {
+            if (post.hasOwnProperty(item)) {
+                serializedPost.append(item, post[item]);
+            }
+        }
 
         axios
-            .post("/api/posts", post)
+            .post("/api/posts", serializedPost)
             .then((response) => {
                 router.push({ name: "posts.index" });
             })
