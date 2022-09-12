@@ -262,6 +262,7 @@
                                     class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900"
                                 >
                                     <router-link
+                                        v-if="can('posts.update')"
                                         :to="{
                                             name: 'posts.edit',
                                             params: { id: post.id },
@@ -269,6 +270,7 @@
                                         >Edit</router-link
                                     >
                                     <a
+                                        v-if="can('posts.delete')"
                                         href="#"
                                         @click.prevent="deletePost(post.id)"
                                         class="ml-2"
@@ -294,7 +296,7 @@
 import { ref, onMounted, watch } from "vue";
 import usePosts from "../../composable/post";
 import useCategories from "../../composable/categories";
-
+import { useAbility } from "@casl/vue";
 export default {
     setup() {
         const search_category = ref("");
@@ -306,6 +308,7 @@ export default {
         const orderDirection = ref("desc");
         const { posts, getPosts, deletePost } = usePosts();
         const { categories, getCategories } = useCategories();
+        const { can } = useAbility();
         onMounted(() => {
             getPosts();
             getCategories();
@@ -391,6 +394,7 @@ export default {
             search_title,
             search_content,
             search_global,
+            can,
         };
     },
 };
